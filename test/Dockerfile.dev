@@ -1,0 +1,13 @@
+##
+# E2E testing Dockerfile
+##
+
+FROM cypress/included:13.7.1
+
+WORKDIR /e2e
+
+COPY ./test/package*.json /e2e
+COPY ./test/cypress.config.ts /e2e
+COPY ./test/cypress /e2e/cypress
+
+RUN npm ci

@@ -53,6 +53,9 @@ docker compose build
 
 # Ajetaan sovellus uudestaan ylös, samalla luoden nimeämättömät (node_modules) voluumit uudestaan
 docker compose up -d -V
+
+# Ajetaan e2e testit uudestaan
+docker compose run e2e
 ```
 
 ## Harjoitustyön tavoite
