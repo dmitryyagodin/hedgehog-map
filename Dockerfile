@@ -49,7 +49,7 @@ RUN rm -r src
 ###
 FROM base AS main
 
-WORKDIR ${APPDIR}
+WORKDIR ${APPDIR}/server
 
 COPY --from=server-build ${APPDIR}/server ./
 COPY --from=client-build ${APPDIR}/client/dist ./static
