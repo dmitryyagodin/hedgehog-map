@@ -9,6 +9,7 @@
   "devDependencies": {
     "@types/node": "^20.11.30",
     "cypress": "13.7.1",
+    "prettier": "^3.2.5",
     "typescript": "^4.9.4"
   },
   "author": "Dima Yagodin",

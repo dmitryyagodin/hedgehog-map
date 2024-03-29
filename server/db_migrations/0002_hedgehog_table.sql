@@ -21,16 +21,3 @@ VALUES
 			3857
 		)
 	);
-
-INSERT INTO
-	hedgehog ("name", "age", "gender", "coordinates")
-VALUES
-	(
-		'Sonic2',
-		50,
-		'female',
-		ST_SetSRID(
-			ST_MakePoint(3085311.6450856356, 10906097.626616776),
-			3857
-		)
-	);
