@@ -1,9 +1,9 @@
 import { Box, MenuItem, Paper, Typography } from "@mui/material";
-import { Hedgehog } from "@shared/hedgehog";
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
+import { DataContext } from "./context/dataContext";
 
 export default function HedgeHogList() {
-  const [hedgehogs, setHedgehogs] = useState<Hedgehog[]>([]);
+  const { setHedgehogs, hedgehogs, setSelectedHedgehog, ids, setIds } = useContext(DataContext);
 
   // Fetch all hedgehog's during startup
   useEffect(() => {
@@ -13,7 +13,8 @@ export default function HedgeHogList() {
         if (!res.ok) return;
 
         const json = await res.json();
-        setHedgehogs(json?.hedgehogs || []);
+
+        setIds(json?.ids || []);
       } catch (err) {
         console.error(`Error while fetching hedgehogs: ${err}`);
       }
@@ -21,6 +22,22 @@ export default function HedgeHogList() {
 
     getAllHedgehogs();
   }, []);
+
+  async function handleClick(id: number) {
+    setSelectedHedgehog(id);
+
+    /* no need to fetch if already in the state */
+    if (hedgehogs?.find(h => h.id === id)) return
+
+    try {
+      const res = await fetch(`/api/v1/hedgehog/${id}`);
+      if (!res.ok) return;
+      const json = await res.json();
+      setHedgehogs([json.hedgehog]);
+    } catch (err) {
+      console.error(`Error while fetching hedgehogs: ${err}`);
+    }
+  }
 
   return (
     <Paper elevation={3} sx={{ margin: "1em", overflow: "hidden" }}>
@@ -38,10 +55,15 @@ export default function HedgeHogList() {
           Rekisteröidyt siilit
         </Typography>
       </Box>
-      {hedgehogs.length ? (
+      {ids && ids.length ? (
         <Box sx={{ overflowY: "scroll", height: "100%" }}>
-          {hedgehogs.map((hedgehog, index: number) => (
-            <MenuItem key={`hedgehog-index-${index}`}>{hedgehog.id}</MenuItem>
+          {ids.map((id) => (
+            <MenuItem
+              key={`hedgehog-index-${id}`}
+              onClick={() => handleClick(id)}
+            >
+              #{id}
+            </MenuItem>
           ))}
         </Box>
       ) : (
