@@ -1,10 +1,13 @@
 import { Paper, Typography } from "@mui/material";
+import { useContext } from "react";
+import { DataContext } from "./context/dataContext";
+import { formatDate } from './lib/formatDate';
 
-interface Props {
-  hedgehogId: number | null;
-}
 
-export function HedgehogInfo({ hedgehogId }: Props) {
+export function HedgehogInfo() {
+  const { selectedHedgehog, hedgehogs } = useContext(DataContext);
+  const currentHedgehog = hedgehogs?.find(h => h.id === selectedHedgehog) || null;
+
   return (
     <Paper
       elevation={3}
@@ -13,18 +16,12 @@ export function HedgehogInfo({ hedgehogId }: Props) {
         padding: "1em",
       }}
     >
-      <Typography>
-        TODO: Esitä tässä komponentissa haluamallasi tavalla yksittäisen, tällä
-        hetkellä valittuna olevan, siilin tiedot. Siili valitaan
-        vasemmanpuoleisesta listauksesta. Kartalla esitetään valitun siilin
-        sijainti karttamerkin avulla.
-      </Typography>
-      <br />
-      <Typography>
-        Komponentille välitetään React propertynä yksittäisen siilin ID, jonka
-        muuttuessa ko. siilin tiedot haetaan rajapinnalta.
-      </Typography>
-      <br />
+      {currentHedgehog && <Typography>
+        Nimi: {currentHedgehog.name}<br />
+        Ikä: {currentHedgehog.age}<br />
+        Sukupuoli: {currentHedgehog.gender}<br />
+        Havaittu: {currentHedgehog.date && formatDate(currentHedgehog.date)}
+      </Typography>}
     </Paper>
   );
 }
