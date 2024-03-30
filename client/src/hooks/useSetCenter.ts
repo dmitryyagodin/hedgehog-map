@@ -10,7 +10,7 @@ export const useSetCenter = (
     const initialCenter = selectedHedgehog
       ? selectedHedgehog.coordinates
       : coordinates;
-    const initialZoom = selectedHedgehog ? 10 : 5;
+    const initialZoom = 5;
     return new View({
       center: initialCenter,
       zoom: initialZoom,

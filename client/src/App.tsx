@@ -14,7 +14,7 @@ export function App() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "100vh",
+          height: { md: "100vh" },
           justifyContent: "space-between",
         }}
       >
@@ -38,9 +38,9 @@ export function App() {
             width: "100%",
             height: "100%",
             display: "grid",
-            gridAutoColumns: "1fr 1.5fr 2fr",
-            gridAutoFlow: "column",
-            overflow: "hidden",
+            gridAutoColumns: { xs: "1fr", md: "1fr 1.5fr 2fr" },
+            gridAutoFlow: { xs: "row", md: "column" },
+            overflow: { md: "hidden" },
           }}
         >
           <HedgeHogList />
@@ -48,7 +48,10 @@ export function App() {
             <HedgehogInfo />
             <HedgehogForm />
           </Box>
-          <Paper elevation={3} sx={{ margin: "1em" }}>
+          <Paper
+            elevation={3}
+            sx={{ margin: "1em", minHeight: { xs: "50vh", md: "initial" } }}
+          >
             <Map />
           </Paper>
         </Box>
@@ -63,7 +66,6 @@ export function App() {
             alignItems: "center",
           }}
         >
-          {" "}
           <Typography sx={{ color: "white" }} variant="overline">
             Powered by Ubigu Oy
           </Typography>

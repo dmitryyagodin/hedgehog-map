@@ -19,8 +19,10 @@ export default function HedgeHogList() {
         const res = await fetch("/api/v1/hedgehog");
         if (!res.ok) return;
 
-        const { ids } = await res.json();
-        ids && ids.length && setIds(ids);
+        const data = await res.json();
+        data.ids &&
+          data.ids.length &&
+          setIds([...new Set([...data.ids, ...(ids || [])])]);
       } catch (err) {
         console.error(`Error while fetching hedgehogs: ${err}`);
       } finally {
@@ -31,12 +33,12 @@ export default function HedgeHogList() {
     getAllHedgehogs();
   }, []);
 
-  async function handleClick(id: number) {
-    setIsLoading(true);
+  async function handleFetchById(id: number) {
     setSelectedHedgehog(id);
 
     /* no need to fetch if already in the state */
     if (hedgehogs?.find((h) => h.id === id)) return;
+    setIsLoading(true);
 
     try {
       const res = await fetch(`/api/v1/hedgehog/${id}`);
@@ -71,7 +73,7 @@ export default function HedgeHogList() {
           {ids.map((id) => (
             <MenuItem
               key={`hedgehog-index-${id}`}
-              onClick={() => handleClick(id)}
+              onClick={() => handleFetchById(id)}
             >
               #{id}
             </MenuItem>

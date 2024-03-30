@@ -15,7 +15,7 @@ import { hedgehogSchema } from "@ubigu/shared/src/hedgehog";
 import { useContext, useState } from "react";
 
 export function HedgehogForm() {
-  const { coordinates, setIds, setIsLoading } = useContext(DataContext);
+  const { coordinates, setIds, setIsLoading, ids } = useContext(DataContext);
   const [errors, setErrors] = useState<{
     name?: string;
     age?: string;
@@ -62,7 +62,7 @@ export function HedgehogForm() {
 
           const data = await res.json();
           const id: number | null = data?.id;
-          id && setIds([id]);
+          id && setIds([...(ids || []), id]);
         } catch (err) {
           console.error(`Error while adding a new hedgehog: ${err}`);
         } finally {
@@ -78,62 +78,64 @@ export function HedgehogForm() {
     const { latitude, longitude } = transformCoordinates(coordinates);
 
     return (
-      <form onSubmit={handleSubmit}>
-        <Box display="flex" flexDirection="column" rowGap={2}>
-          <TextField
-            label="Nimi"
-            name="name"
-            variant="outlined"
-            error={!!errors.name}
-            helperText={errors.name}
-            fullWidth
-          />
-          <TextField
-            label="Ikä (1-20)"
-            name="age"
-            variant="outlined"
-            type="number"
-            error={!!errors.age}
-            helperText={errors.age}
-            fullWidth
-            placeholder="1-20"
-          />
-          <FormControl variant="outlined" error={!!errors.gender} fullWidth>
-            <InputLabel id="gender-label">Sukupuoli</InputLabel>
-            <Select
-              labelId="gender-label"
-              label="Sukupuoli"
-              name="gender"
+      <Box sx={{ maxWidth: { xs: "300px", md: "100%" }, margin: "0 auto" }}>
+        <form onSubmit={handleSubmit}>
+          <Box display="flex" flexDirection="column" rowGap={2}>
+            <TextField
+              label="Nimi"
+              name="name"
               variant="outlined"
-              error={!!errors.gender}
-              defaultValue=""
-            >
-              <MenuItem value="unknown" selected>
-                Tunematon
-              </MenuItem>
-              <MenuItem value="male">Koiras</MenuItem>
-              <MenuItem value="female">Naaras</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            label="Lat."
-            variant="outlined"
-            value={latitude}
-            disabled
-            fullWidth
-          />
-          <TextField
-            label="Long."
-            variant="outlined"
-            value={longitude}
-            disabled
-            fullWidth
-          />
-        </Box>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Lisää
-        </Button>
-      </form>
+              error={!!errors.name}
+              helperText={errors.name}
+              fullWidth
+            />
+            <TextField
+              label="Ikä (1-20)"
+              name="age"
+              variant="outlined"
+              type="number"
+              error={!!errors.age}
+              helperText={errors.age}
+              fullWidth
+              placeholder="1-20"
+            />
+            <FormControl variant="outlined" error={!!errors.gender} fullWidth>
+              <InputLabel id="gender-label">Sukupuoli</InputLabel>
+              <Select
+                labelId="gender-label"
+                label="Sukupuoli"
+                name="gender"
+                variant="outlined"
+                error={!!errors.gender}
+                defaultValue=""
+              >
+                <MenuItem value="unknown" selected>
+                  Tunematon
+                </MenuItem>
+                <MenuItem value="male">Koiras</MenuItem>
+                <MenuItem value="female">Naaras</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Lat."
+              variant="outlined"
+              value={latitude}
+              disabled
+              fullWidth
+            />
+            <TextField
+              label="Long."
+              variant="outlined"
+              value={longitude}
+              disabled
+              fullWidth
+            />
+          </Box>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Lisää
+          </Button>
+        </form>
+      </Box>
     );
   }
 

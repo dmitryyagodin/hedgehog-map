@@ -92,3 +92,22 @@ export async function insertHedgehog({
     return null;
   }
 }
+
+/**
+ * Delete a hedgehog by ID
+ */
+export async function deleteHedgehogById(id: number) {
+  if (!id) throw new Error("ID is required");
+  try {
+    const query = sql.type(hedgehogSchema)`
+      DELETE FROM hedgehog
+      WHERE id = ${id}
+    `;
+
+    const result = await getPool().query(query);
+    return result.rowCount > 0;
+  } catch (error) {
+    logger.error(error);
+    throw new Error("Failed to delete hedgehog");
+  }
+}

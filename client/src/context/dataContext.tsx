@@ -52,23 +52,13 @@ export const ContextProvider = ({ children }: Props) => {
     });
   };
 
-  const handleSetIds = (newIds: number[] | null) => {
-    setIds((prevIds) => {
-      if (prevIds) {
-        return [...new Set([...prevIds, ...(newIds || [])])];
-      } else {
-        return newIds;
-      }
-    });
-  };
-
   return (
     <DataContext.Provider
       value={{
         isLoading,
         setIsLoading,
         ids,
-        setIds: handleSetIds,
+        setIds,
         hedgehogs,
         setHedgehogs: handleSetHedgehogs,
         selectedHedgehog,
