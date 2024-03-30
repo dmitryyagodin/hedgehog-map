@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { Hedgehog } from "@ubigu/shared/src/hedgehog";
 import { View } from "ol";
-import { Hedgehog } from '@ubigu/shared/src/hedgehog';
+import { useEffect, useState } from "react";
 
-export const useSetCenter = (selectedHedgehog: Hedgehog | null, coordinates: number[]): View => {
+export const useSetCenter = (
+  selectedHedgehog: Hedgehog | null,
+  coordinates: number[]
+): View => {
   const [olView] = useState(() => {
-    const initialCenter = selectedHedgehog ? selectedHedgehog.coordinates : coordinates;
+    const initialCenter = selectedHedgehog
+      ? selectedHedgehog.coordinates
+      : coordinates;
     const initialZoom = selectedHedgehog ? 10 : 5;
     return new View({
       center: initialCenter,
@@ -16,7 +21,11 @@ export const useSetCenter = (selectedHedgehog: Hedgehog | null, coordinates: num
 
   useEffect(() => {
     if (selectedHedgehog) {
-      olView.animate({ center: selectedHedgehog.coordinates, zoom: 12, duration: 2000 });
+      olView.animate({
+        center: selectedHedgehog.coordinates,
+        zoom: 12,
+        duration: 2000,
+      });
     } else {
       olView.animate({ center: coordinates, zoom: 5, duration: 2000 });
     }

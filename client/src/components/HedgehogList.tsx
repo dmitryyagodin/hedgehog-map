@@ -1,9 +1,16 @@
+import { DataContext } from "../context/dataContext";
 import { Box, MenuItem, Paper, Typography } from "@mui/material";
 import { useEffect, useContext } from "react";
-import { DataContext } from "./context/dataContext";
 
 export default function HedgeHogList() {
-  const { setHedgehogs, hedgehogs, setSelectedHedgehog, ids, setIds } = useContext(DataContext);
+  const {
+    setHedgehogs,
+    hedgehogs,
+    setSelectedHedgehog,
+    ids,
+    setIds,
+    setIsLoading,
+  } = useContext(DataContext);
 
   // Fetch all hedgehog's during startup
   useEffect(() => {
@@ -12,11 +19,12 @@ export default function HedgeHogList() {
         const res = await fetch("/api/v1/hedgehog");
         if (!res.ok) return;
 
-        const json = await res.json();
-
-        setIds(json?.ids || []);
+        const { ids } = await res.json();
+        ids && ids.length && setIds(ids);
       } catch (err) {
         console.error(`Error while fetching hedgehogs: ${err}`);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -24,10 +32,11 @@ export default function HedgeHogList() {
   }, []);
 
   async function handleClick(id: number) {
+    setIsLoading(true);
     setSelectedHedgehog(id);
 
     /* no need to fetch if already in the state */
-    if (hedgehogs?.find(h => h.id === id)) return
+    if (hedgehogs?.find((h) => h.id === id)) return;
 
     try {
       const res = await fetch(`/api/v1/hedgehog/${id}`);
@@ -36,6 +45,8 @@ export default function HedgeHogList() {
       setHedgehogs([json.hedgehog]);
     } catch (err) {
       console.error(`Error while fetching hedgehogs: ${err}`);
+    } finally {
+      setIsLoading(false);
     }
   }
 

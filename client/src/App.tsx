@@ -1,15 +1,15 @@
-import { HedgehogForm } from "./HedgehogForm";
-import { HedgehogInfo } from "./HedgehogInfo";
-import HedgeHogList from "./HedgehogList";
-import { Map } from "./Map";
-import { Box, Paper, Typography } from "@mui/material";
+import { HedgehogForm } from "./components/HedgehogForm";
+import { HedgehogInfo } from "./components/HedgehogInfo";
+import HedgeHogList from "./components/HedgehogList";
+import { Map } from "./components/Map";
+import Spinner from "./components/Spinner";
 import { ContextProvider } from "./context/dataContext";
+import { Box, Paper, Typography } from "@mui/material";
 
 export function App() {
-
   return (
-
     <ContextProvider>
+      <Spinner />
       <Box
         sx={{
           display: "flex",

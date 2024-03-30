@@ -18,7 +18,7 @@ export async function getAllHedgehogs() {
       date
     FROM
       hedgehog;   
-    `
+    `;
 
     return await getPool().any(query);
   } catch (error) {
@@ -29,7 +29,7 @@ export async function getAllHedgehogs() {
 /**
  * Fetch a hedgehog by ID
  */
-export async function getHedgehogById(id: number ) {
+export async function getHedgehogById(id: number) {
   if (!id) throw new Error("ID is required");
   try {
     const query = sql.type(hedgehogSchema)`
@@ -62,7 +62,12 @@ export async function getHedgehogById(id: number ) {
 /**
  * Add a new hedgehog to the database
  */
-export async function insertHedgehog({name, age, gender, coordinates}: Hedgehog ) {
+export async function insertHedgehog({
+  name,
+  age,
+  gender,
+  coordinates,
+}: Hedgehog) {
   try {
     const query = sql.type(hedgehogSchema)`
       INSERT INTO
@@ -79,10 +84,11 @@ export async function insertHedgehog({name, age, gender, coordinates}: Hedgehog 
     const { id } = await getPool().one(query);
 
     if (!id) {
-      throw new Error('Failed to return an insert ID');
+      throw new Error("Failed to return an insert ID");
     }
     return id;
   } catch (error) {
     logger.error(error);
+    return null;
   }
 }

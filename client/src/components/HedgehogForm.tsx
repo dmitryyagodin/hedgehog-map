@@ -1,5 +1,5 @@
-import { DataContext } from "./context/dataContext";
-import { transformCoordinates } from "./lib/transformCoordinates";
+import { DataContext } from "../context/dataContext";
+import { transformCoordinates } from "../lib/transformCoordinates";
 import {
   Box,
   Button,
@@ -15,7 +15,7 @@ import { hedgehogSchema } from "@ubigu/shared/src/hedgehog";
 import { useContext, useState } from "react";
 
 export function HedgehogForm() {
-  const { coordinates, setIds } = useContext(DataContext);
+  const { coordinates, setIds, setIsLoading } = useContext(DataContext);
   const [errors, setErrors] = useState<{
     name?: string;
     age?: string;
@@ -45,6 +45,8 @@ export function HedgehogForm() {
       });
       setErrors(validationErrors);
     } else if (validation.success && validation.data) {
+      setIsLoading(true);
+
       const postHedgehog = async () => {
         try {
           const res = await fetch("/api/v1/hedgehog", {
@@ -60,12 +62,11 @@ export function HedgehogForm() {
 
           const data = await res.json();
           const id: number | null = data?.id;
-
-          if (id !== null && id !== undefined) {
-            // setIds((prevIds) => Array.isArray(prevIds) ? [...prevIds, id] : id);
-          }
+          id && setIds([id]);
         } catch (err) {
           console.error(`Error while adding a new hedgehog: ${err}`);
+        } finally {
+          setIsLoading(false);
         }
       };
 

@@ -31,7 +31,12 @@ export function hedgehogRouter(
     try {
       const params = await _request.body;
       const id = await insertHedgehog(hedgehogSchema.parse(params));
-      return reply.code(200).send({ success: true, id });
+
+      return id
+        ? reply.code(201).send({ success: true, id })
+        : reply
+            .code(409)
+            .send({ success: false, message: "failed to process request" });
     } catch (error) {
       console.error(error);
       return reply

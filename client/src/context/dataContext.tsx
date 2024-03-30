@@ -1,73 +1,83 @@
-import { Hedgehog } from '@ubigu/shared/src/hedgehog';
-import { Position } from 'geojson';
-import React, { ReactNode, useState } from 'react';
+import { Hedgehog } from "@ubigu/shared/src/hedgehog";
+import { Position } from "geojson";
+import React, { ReactNode, useState } from "react";
 
 type DataContextType = {
-	isLoading: boolean;
-	setIsLoading: (loading: boolean) => void;
-	ids: number[] | null;
-	setIds: (ids: number[] | null) => void;
-	hedgehogs: Hedgehog[] | null;
-	setHedgehogs: (hedgehogs: Hedgehog[] | null) => void;
-	selectedHedgehog: number | null;
-	setSelectedHedgehog: (id: number | null) => void;
-	coordinates: Position | null;
-	setCoordinates: (coordinates: Position | null) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  ids: number[] | null;
+  setIds: (ids: number[] | null) => void;
+  hedgehogs: Hedgehog[] | null;
+  setHedgehogs: (hedgehogs: Hedgehog[] | null) => void;
+  selectedHedgehog: number | null;
+  setSelectedHedgehog: (id: number | null) => void;
+  coordinates: Position | null;
+  setCoordinates: (coordinates: Position | null) => void;
 };
 
 const contextDefaultValues: DataContextType = {
-	isLoading: false,
-	setIsLoading: () => null,
-	ids: null,
-	setIds: () => null,
-	hedgehogs: null,
-	setHedgehogs: () => null,
-	selectedHedgehog: null,
-	setSelectedHedgehog: () => null,
-	coordinates: null,
-	setCoordinates: () => null,
+  isLoading: true,
+  setIsLoading: () => null,
+  ids: null,
+  setIds: () => null,
+  hedgehogs: null,
+  setHedgehogs: () => null,
+  selectedHedgehog: null,
+  setSelectedHedgehog: () => null,
+  coordinates: null,
+  setCoordinates: () => null,
 };
 
-export const DataContext = React.createContext<DataContextType>(contextDefaultValues);
+export const DataContext =
+  React.createContext<DataContextType>(contextDefaultValues);
 
 type Props = {
-	children: ReactNode;
+  children: ReactNode;
 };
 
 export const ContextProvider = ({ children }: Props) => {
-	const [isLoading, setIsLoading] = useState(false);
-	const [hedgehogs, setHedgehogs] = useState<Hedgehog[] | null>(null);
-	const [selectedHedgehog, setSelectedHedgehog] = useState<number | null>(null);
-	const [coordinates, setCoordinates] = useState<Position | null>(null);
-	const [ids, setIds] = useState<number[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hedgehogs, setHedgehogs] = useState<Hedgehog[] | null>(null);
+  const [selectedHedgehog, setSelectedHedgehog] = useState<number | null>(null);
+  const [coordinates, setCoordinates] = useState<Position | null>(null);
+  const [ids, setIds] = useState<number[] | null>(null);
 
-	const handleSetHedgehogs = (newHedgehogs: Hedgehog[] | null) => {
-		setHedgehogs(prevHedgehogs => {
-			if (prevHedgehogs) {
+  const handleSetHedgehogs = (newHedgehogs: Hedgehog[] | null) => {
+    setHedgehogs((prevHedgehogs) => {
+      if (prevHedgehogs) {
+        return [...prevHedgehogs, ...(newHedgehogs || [])];
+      } else {
+        return newHedgehogs;
+      }
+    });
+  };
 
-				return [...prevHedgehogs, ...(newHedgehogs || [])];
-			} else {
-				return newHedgehogs;
-			}
-		});
-	};
+  const handleSetIds = (newIds: number[] | null) => {
+    setIds((prevIds) => {
+      if (prevIds) {
+        return [...new Set([...prevIds, ...(newIds || [])])];
+      } else {
+        return newIds;
+      }
+    });
+  };
 
-	return (
-		<DataContext.Provider
-			value={{
-				isLoading,
-				setIsLoading,
-				ids,
-				setIds,
-				hedgehogs,
-				setHedgehogs: handleSetHedgehogs,
-				selectedHedgehog,
-				setSelectedHedgehog,
-				coordinates,
-				setCoordinates
-			}}
-		>
-			{children}
-		</DataContext.Provider>
-	);
+  return (
+    <DataContext.Provider
+      value={{
+        isLoading,
+        setIsLoading,
+        ids,
+        setIds: handleSetIds,
+        hedgehogs,
+        setHedgehogs: handleSetHedgehogs,
+        selectedHedgehog,
+        setSelectedHedgehog,
+        coordinates,
+        setCoordinates,
+      }}
+    >
+      {children}
+    </DataContext.Provider>
+  );
 };

@@ -1,19 +1,18 @@
-import { useState, useEffect, useRef, useContext } from "react";
-import { Map as OlMap, MapBrowserEvent, Feature } from "ol";
-import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM.js";
-import { DataContext } from "./context/dataContext";
+import { DataContext } from "../context/dataContext";
+import useResetView from "../hooks/useResetView";
+import { useSetCenter } from "../hooks/useSetCenter";
+import { useSetFeatures } from "../hooks/useSetFeatures";
+import { createNewVectorLayer } from "../lib/createNewVectorLayer";
+import ZoomControls from "./ZoomControls";
 import { GlobalStyles } from "@mui/material";
+import { Map as OlMap, MapBrowserEvent, Feature } from "ol";
+import Point from "ol/geom/Point";
+import TileLayer from "ol/layer/Tile";
+import VectorLayer from "ol/layer/Vector";
+import OSM from "ol/source/OSM.js";
+import VectorSource from "ol/source/Vector";
+import { useState, useEffect, useRef, useContext } from "react";
 import { ReactNode } from "react";
-import { useSetCenter } from './hooks/useSetCenter';
-import { useSetFeatures } from './hooks/useSetFeatures';
-import ZoomControls from './ZoomControls';
-import useResetView from './hooks/useResetView';
-import Point from 'ol/geom/Point';
-import { createNewVectorLayer } from './lib/createNewVectorLayer';
-import { Geometry } from 'geojson';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
 
 interface Props {
   children?: ReactNode;
@@ -22,9 +21,11 @@ interface Props {
 const defaultCoordinates = [2659167.020281517, 9632038.56757201];
 
 export function Map({ children }: Props) {
-  const { setCoordinates, selectedHedgehog, hedgehogs } = useContext(DataContext);
+  const { setCoordinates, selectedHedgehog, hedgehogs } =
+    useContext(DataContext);
   const mapRef = useRef<HTMLDivElement>(null);
-  const currentHedgehog = hedgehogs?.find(h => h.id === selectedHedgehog) || null;
+  const currentHedgehog =
+    hedgehogs?.find((h) => h.id === selectedHedgehog) || null;
 
   const setCenter = useSetCenter(currentHedgehog, defaultCoordinates);
 
@@ -58,15 +59,16 @@ export function Map({ children }: Props) {
       setCoordinates(event.coordinate);
 
       if (newVectorLayer) {
-        olMap.removeLayer(newVectorLayer)
+        olMap.removeLayer(newVectorLayer);
       }
 
-      newVectorLayer = createNewVectorLayer({ fillColor: "lime", strokeColor: "red" })
-
+      newVectorLayer = createNewVectorLayer({
+        fillColor: "lime",
+        strokeColor: "red",
+      });
 
       // Add the newVectorLayer to the map
       olMap.addLayer(newVectorLayer);
-
 
       // Create a new feature
       const newFeature = new Feature({
@@ -78,7 +80,7 @@ export function Map({ children }: Props) {
 
       singleClickFlag = true;
       // Remove pointermove listener when double click occurs
-      olMap.un('pointermove', handlePointerMove);
+      olMap.un("pointermove", handlePointerMove);
     };
 
     const handlePointerMove = (event: MapBrowserEvent<UIEvent>) => {
@@ -89,24 +91,29 @@ export function Map({ children }: Props) {
     };
 
     olMap.on("singleclick", handleSingleClick);
-    olMap.on('pointermove', handlePointerMove);
+    olMap.on("pointermove", handlePointerMove);
 
     // Cleanup function to remove event listeners
     return () => {
       olMap.un("singleclick", handleSingleClick);
-      olMap.un('pointermove', handlePointerMove);
+      olMap.un("pointermove", handlePointerMove);
     };
   }, [olMap]);
-
-
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <GlobalStyles styles={{ ".ol-viewport": { cursor: "pointer" } }} />
-      <div style={{ width: "100%", height: "100%", position: "relative" }} ref={mapRef}>
+      <div
+        style={{ width: "100%", height: "100%", position: "relative" }}
+        ref={mapRef}
+      >
         <ZoomControls
-          onZoomIn={() => olMap?.getView().setZoom((olMap?.getView().getZoom() ?? 0) + 1)}
-          onZoomOut={() => olMap?.getView().setZoom((olMap?.getView().getZoom() ?? 0) - 1)}
+          onZoomIn={() =>
+            olMap?.getView().setZoom((olMap?.getView().getZoom() ?? 0) + 1)
+          }
+          onZoomOut={() =>
+            olMap?.getView().setZoom((olMap?.getView().getZoom() ?? 0) - 1)
+          }
           onResetView={() => resetView()}
         />
         {children}
