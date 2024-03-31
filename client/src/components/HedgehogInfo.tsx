@@ -56,7 +56,7 @@ export function HedgehogInfo() {
       // Remove the deleted hedgehog from the local state
       hedgehogs && setHedgehogs(hedgehogs.filter((h) => h.id !== id));
       setSelectedHedgehog(null);
-      setIds([...(ids ? ids.filter((item) => id !== item) : [])]);
+      setIds([...(ids ? ids.filter((item) => id !== item.id) : [])]);
     } catch (err) {
       console.error(`Error while deleting hedgehog with ID ${id}: ${err}`);
     } finally {
@@ -83,7 +83,7 @@ export function HedgehogInfo() {
 
   return (
     <>
-      <Paper elevation={3} sx={{ margin: "1em 0em 1em 0em", padding: "1em" }}>
+      <Paper elevation={3} sx={{ margin: "1em", padding: "1em" }}>
         <Box
           sx={{
             height: "100%",
@@ -102,32 +102,22 @@ export function HedgehogInfo() {
                   gap: "1rem",
                 }}
               >
-                <span>
-                  <strong>Nimi</strong>
-                </span>
-                <span>{currentHedgehog.name}</span>
-                <span>
-                  <strong>Ikä</strong>
-                </span>
-                <span>{currentHedgehog.age}</span>
-                <span>
-                  <strong>Sukupuoli</strong>
-                </span>
-                <span>{currentHedgehog.gender}</span>
-                <span>
-                  <strong>Lisätty</strong>
-                </span>
-                <span>
-                  {currentHedgehog.date && formatDate(currentHedgehog.date)}
-                </span>
-                <span>
-                  <strong>Lev.</strong>
-                </span>
-                <span>{coords.latitude}</span>
-                <span>
-                  <strong>Pit.</strong>
-                </span>
-                <span>{coords.longitude}</span>
+                <LabelValuePair label="Nimi" value={currentHedgehog.name} />
+                <LabelValuePair label="Ikä" value={currentHedgehog.age} />
+                <LabelValuePair
+                  label="Sukupuoli"
+                  value={currentHedgehog.gender}
+                />
+                <LabelValuePair
+                  label="Lisätty"
+                  value={
+                    (currentHedgehog.date &&
+                      formatDate(currentHedgehog.date)) ||
+                    ""
+                  }
+                />
+                <LabelValuePair label="Lev." value={coords.latitude} />
+                <LabelValuePair label="Pit." value={coords.longitude} />
               </Typography>
               <Box
                 sx={{
@@ -171,3 +161,18 @@ export function HedgehogInfo() {
     </>
   );
 }
+
+const LabelValuePair = ({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) => (
+  <>
+    <span>
+      <strong>{label}</strong>
+    </span>
+    <span>{value}</span>
+  </>
+);

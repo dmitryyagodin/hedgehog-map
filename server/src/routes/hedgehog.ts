@@ -17,7 +17,10 @@ export function hedgehogRouter(
       const hedgehogs = await getAllHedgehogs();
 
       if (hedgehogs && hedgehogs.length) {
-        const ids = hedgehogs.map((hedgehog) => hedgehog.id);
+        const ids = hedgehogs.map((hedgehog) => ({
+          id: hedgehog.id,
+          name: hedgehog.name,
+        }));
         return reply.code(200).send({ ids });
       }
     } catch (error) {

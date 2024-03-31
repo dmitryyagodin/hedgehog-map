@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Paper,
@@ -67,8 +68,12 @@ export function HedgehogForm() {
           if (!res.ok) return;
 
           const data = await res.json();
-          const id: number | null = data?.id;
-          id && setIds([...(ids || []), id]);
+          const id = {
+            id: data.id,
+            name: data.name,
+          };
+
+          setIds([...(ids || []), id]);
         } catch (err) {
           console.error(`Error while adding a new hedgehog: ${err}`);
         } finally {
@@ -81,13 +86,32 @@ export function HedgehogForm() {
     }
   };
 
+  function checkCustomValidity(event: React.FocusEvent<HTMLInputElement>) {
+    const target = event.target.name;
+    const inputValue = event.target.value;
+
+    const validation = hedgehogSchema.safeParse({
+      [target]: inputValue,
+    });
+
+    if ("error" in validation) {
+      const validationErrors: { [key: string]: string } = {};
+      validation.error.errors.forEach((err) => {
+        if (err.path[0] === event.target.name) {
+          validationErrors[err.path[0]] = err.message;
+        }
+      });
+      setErrors(validationErrors);
+    }
+  }
+
   if (coordinates && coordinates.length) {
     const { latitude, longitude } = transformCoordinates(coordinates);
 
     return (
       <Box
         sx={{
-          maxWidth: { xs: "300px", md: "100%" },
+          maxWidth: "300px",
           margin: "0 auto",
           position: "relative",
         }}
@@ -102,6 +126,7 @@ export function HedgehogForm() {
               error={!!errors.name}
               helperText={errors.name}
               fullWidth
+              onBlur={checkCustomValidity}
             />
             <TextField
               label="Ikä (1-20)"
@@ -112,6 +137,7 @@ export function HedgehogForm() {
               helperText={errors.age}
               fullWidth
               placeholder="1-20"
+              onBlur={checkCustomValidity}
             />
             <FormControl variant="outlined" error={!!errors.gender} fullWidth>
               <InputLabel id="gender-label">Sukupuoli</InputLabel>
@@ -122,13 +148,17 @@ export function HedgehogForm() {
                 variant="outlined"
                 error={!!errors.gender}
                 defaultValue=""
+                onBlur={checkCustomValidity}
               >
                 <MenuItem value="unknown" selected>
-                  Tunematon
+                  unknown
                 </MenuItem>
                 <MenuItem value="male">Koiras</MenuItem>
                 <MenuItem value="female">Naaras</MenuItem>
               </Select>
+              {errors.gender && (
+                <FormHelperText>{errors.gender}</FormHelperText>
+              )}
             </FormControl>
             <TextField
               label="Lat."
@@ -145,7 +175,13 @@ export function HedgehogForm() {
               fullWidth
             />
           </Box>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          <Button
+            sx={{ marginTop: "16px" }}
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+          >
             Lisää
           </Button>
         </form>

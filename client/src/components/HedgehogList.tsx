@@ -77,12 +77,12 @@ export default function HedgeHogList() {
         <Spinner active={spinnerActive} />
         {ids && ids.length && (
           <Box sx={{ overflowY: "scroll" }}>
-            {ids.map((id) => (
+            {ids.map((item, index) => (
               <MenuItem
-                key={`hedgehog-index-${id}`}
-                onClick={() => handleFetchById(id)}
+                key={`hedgehog-index-${item.id}`}
+                onClick={() => handleFetchById(item.id)}
               >
-                #{id}
+                #{index + 1} {item.name}
               </MenuItem>
             ))}
           </Box>
