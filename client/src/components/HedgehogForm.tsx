@@ -1,5 +1,6 @@
 import { DataContext } from "../context/dataContext";
 import { transformCoordinates } from "../lib/transformCoordinates";
+import Spinner from "./Spinner";
 import {
   Box,
   Button,
@@ -15,12 +16,15 @@ import { hedgehogSchema } from "@ubigu/shared/src/hedgehog";
 import { useContext, useState } from "react";
 
 export function HedgehogForm() {
-  const { coordinates, setIds, setIsLoading, ids } = useContext(DataContext);
+  const { coordinates, setIds, setIsLoading, ids, setSelectedHedgehog } =
+    useContext(DataContext);
   const [errors, setErrors] = useState<{
     name?: string;
     age?: string;
     gender?: string;
   }>({});
+
+  const [spinnerActive, setSpinnerAcive] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -45,7 +49,9 @@ export function HedgehogForm() {
       });
       setErrors(validationErrors);
     } else if (validation.success && validation.data) {
+      setSelectedHedgehog(null);
       setIsLoading(true);
+      setSpinnerAcive(true);
 
       const postHedgehog = async () => {
         try {
@@ -67,6 +73,7 @@ export function HedgehogForm() {
           console.error(`Error while adding a new hedgehog: ${err}`);
         } finally {
           setIsLoading(false);
+          setSpinnerAcive(false);
         }
       };
 
@@ -78,7 +85,14 @@ export function HedgehogForm() {
     const { latitude, longitude } = transformCoordinates(coordinates);
 
     return (
-      <Box sx={{ maxWidth: { xs: "300px", md: "100%" }, margin: "0 auto" }}>
+      <Box
+        sx={{
+          maxWidth: { xs: "300px", md: "100%" },
+          margin: "0 auto",
+          position: "relative",
+        }}
+      >
+        <Spinner active={spinnerActive} />
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" rowGap={2}>
             <TextField

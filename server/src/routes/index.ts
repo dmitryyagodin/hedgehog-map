@@ -9,5 +9,14 @@ export function routes(
 ) {
   fastify.register(healthRouter, { prefix: "/health" });
   fastify.register(hedgehogRouter, { prefix: "/hedgehog" });
+
+  // Simulate slow response for all routes
+  // fastify.addHook("onRequest", (request, reply, done) => {
+  //   const delay = 2000;
+  //   setTimeout(() => {
+  //     done();
+  //   }, delay);
+  // });
+
   done();
 }

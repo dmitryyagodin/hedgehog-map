@@ -55,7 +55,7 @@ docker compose build
 docker compose up -d -V
 
 # Ajetaan e2e testit uudestaan
-docker compose run e2e
+docker compose up e2e
 ```
 
 ## Harjoitustyön tavoite

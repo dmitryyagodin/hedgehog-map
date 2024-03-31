@@ -1,6 +1,7 @@
 import { DataContext } from "../context/dataContext";
+import Spinner from "./Spinner";
 import { Box, MenuItem, Paper, Typography } from "@mui/material";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 
 export default function HedgeHogList() {
   const {
@@ -12,8 +13,11 @@ export default function HedgeHogList() {
     setIsLoading,
   } = useContext(DataContext);
 
+  const [spinnerActive, setSpinnerAcive] = useState(false);
+
   // Fetch all hedgehog's during startup
   useEffect(() => {
+    setSpinnerAcive(true);
     const getAllHedgehogs = async () => {
       try {
         const res = await fetch("/api/v1/hedgehog");
@@ -27,6 +31,7 @@ export default function HedgeHogList() {
         console.error(`Error while fetching hedgehogs: ${err}`);
       } finally {
         setIsLoading(false);
+        setSpinnerAcive(false);
       }
     };
 
@@ -68,25 +73,21 @@ export default function HedgeHogList() {
           Rekisteröidyt siilit
         </Typography>
       </Box>
-      {ids && ids.length ? (
-        <Box sx={{ overflowY: "scroll", height: "100%" }}>
-          {ids.map((id) => (
-            <MenuItem
-              key={`hedgehog-index-${id}`}
-              onClick={() => handleFetchById(id)}
-            >
-              #{id}
-            </MenuItem>
-          ))}
-        </Box>
-      ) : (
-        <Typography sx={{ padding: "1em" }}>
-          TODO: Mikäli tietokannasta löytyy siilejä, ne listautuvat tähän.
-          Koodaa logiikka, jolla tämän listauksen siiliä klikkaamalla siili
-          tulee valituksi, jonka jälkeen sen tiedot tulee hakea viereiseen
-          komponenttiin.
-        </Typography>
-      )}
+      <Box sx={{ height: "100%", width: "100%", position: "relative" }}>
+        <Spinner active={spinnerActive} />
+        {ids && ids.length && (
+          <Box sx={{ overflowY: "scroll" }}>
+            {ids.map((id) => (
+              <MenuItem
+                key={`hedgehog-index-${id}`}
+                onClick={() => handleFetchById(id)}
+              >
+                #{id}
+              </MenuItem>
+            ))}
+          </Box>
+        )}
+      </Box>
     </Paper>
   );
 }

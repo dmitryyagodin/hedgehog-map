@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { Hedgehog } from "@ubigu/shared/src/hedgehog";
 import { Feature } from "ol";
+import { Map as OlMap } from "ol";
 import { Point } from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import { Circle, Stroke, Fill, Style} from "ol/style";
-import { Map as OlMap } from "ol";
-import { Hedgehog } from '@ubigu/shared/src/hedgehog';
+import { Circle, Stroke, Fill, Style } from "ol/style";
+import { useState, useEffect } from "react";
 
 export const useSetFeatures = (olMap: OlMap, hedgehogs: Hedgehog[] | null) => {
   const [features, setFeatures] = useState<Feature[]>([]);
@@ -31,6 +31,10 @@ export const useSetFeatures = (olMap: OlMap, hedgehogs: Hedgehog[] | null) => {
       });
       setFeatures(newFeatures);
     }
+
+    // return () => {
+    //   setFeatures([]);
+    // };
   }, [hedgehogs]);
 
   useEffect(() => {

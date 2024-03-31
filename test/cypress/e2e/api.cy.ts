@@ -44,7 +44,7 @@ describe('API tests', () => {
   })
 
   it('request to a valid non-existing hedgehog should return 404', () => {
-    cy.request({ url: apiUrl + '10', failOnStatusCode: false }).as(
+    cy.request({ url: apiUrl + '100000000', failOnStatusCode: false }).as(
       'nonexistingHedgehog',
     )
     cy.get('@nonexistingHedgehog').its('status').should('equal', 404)
