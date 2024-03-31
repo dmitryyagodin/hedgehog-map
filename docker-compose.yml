@@ -51,5 +51,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  e2e:
+    build:
+      context: .
+      dockerfile: test/Dockerfile.dev
+    depends_on:
+      - client
+    environment:
+      - CYPRESS_baseUrl=http://client:8080
+    ports:
+      - 3004:3004
+    volumes:
+      - ./test:/e2e
+      - /test/node_modules
 volumes:
   db-volume:
