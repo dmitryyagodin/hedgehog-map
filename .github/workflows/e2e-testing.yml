@@ -1,0 +1,34 @@
+name: End-to-End Tests
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:stable
+        options: --privileged
+        ports:
+          - 3004:3004
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and Run Docker Compose
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit
+
+      - name: Run Cypress Tests
+        run: |
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml exec e2e npm run cy:run
+
+      - name: Stop Docker Compose
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml down
