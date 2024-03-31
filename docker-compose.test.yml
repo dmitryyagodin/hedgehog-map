@@ -1,0 +1,5 @@
+version: "3.8"
+services:
+  e2e:
+    environment:
+      - CYPRESS_baseUrl=http://client:8080
