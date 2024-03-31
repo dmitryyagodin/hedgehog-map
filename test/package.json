@@ -13,5 +13,6 @@
     "typescript": "^4.9.4"
   },
   "author": "Dima Yagodin",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }
