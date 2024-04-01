@@ -59,8 +59,5 @@ services:
       - client
     environment:
       - CYPRESS_baseUrl=http://client:8080
-    volumes:
-      - ./test:/e2e
-      - /test/node_modules
 volumes:
   db-volume:
