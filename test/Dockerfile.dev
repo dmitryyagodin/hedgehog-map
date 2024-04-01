@@ -6,9 +6,7 @@ FROM cypress/base:18.15.0
 
 WORKDIR /e2e
 
-COPY ./test/package*.json /e2e
-COPY ./test/cypress.config.ts /e2e
-COPY ./test/cypress /e2e/cypress
+COPY ./test /e2e
 
 RUN npm ci
 

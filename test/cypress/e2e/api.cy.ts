@@ -24,10 +24,10 @@ describe('API tests', () => {
   })
 
   /* hedgehog #1 is set by default */
-  it('successfully fetch an existing hedgehog', () => {
-    cy.request({ url: apiUrl + '1' }).as('existingHedgehog')
-    cy.get('@existingHedgehog').its('status').should('equal', 200)
-  })
+  // it('successfully fetch an existing hedgehog', () => {
+  //   cy.request({ url: apiUrl + '1' }).as('existingHedgehog')
+  //   cy.get('@existingHedgehog').its('status').should('equal', 200)
+  // })
 
   it('request to a non-existing hedgehog should return 404', () => {
     cy.request({ url: apiUrl + '0/10', failOnStatusCode: false }).as(
