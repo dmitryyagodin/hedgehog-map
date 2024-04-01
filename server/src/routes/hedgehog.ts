@@ -22,6 +22,8 @@ export function hedgehogRouter(
           name: hedgehog.name,
         }));
         return reply.code(200).send({ ids });
+      } else {
+        return reply.code(200).send({});
       }
     } catch (error) {
       console.error(error);

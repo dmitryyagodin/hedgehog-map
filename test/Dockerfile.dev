@@ -2,7 +2,7 @@
 # E2E testing Dockerfile
 ##
 
-FROM cypress/included:13.7.1
+FROM cypress/base:18.15.0
 
 WORKDIR /e2e
 
@@ -11,3 +11,5 @@ COPY ./test/cypress.config.ts /e2e
 COPY ./test/cypress /e2e/cypress
 
 RUN npm ci
+
+ENTRYPOINT [ "npx", "cypress", "run" ]
