@@ -4,5 +4,5 @@
     "lib": ["es5", "dom"],
     "types": ["cypress", "node"]
   },
-  "include": ["**/*.ts", "cypress.config.js", "cypress/support/e2e.js", "cypress/support/commands.js", "cypress/e2e/urls.js", "cypress/e2e/specs.cy.js", "cypress/e2e/api.cy.js"]
+  "include": ["**/*.ts", "cypress.config.ts", "cypress/support/e2e.ts", "cypress/support/commands.ts", "cypress/e2e/urls.ts", "cypress/e2e/specs.cy.ts", "cypress/e2e/api.cy.ts"]
 }
