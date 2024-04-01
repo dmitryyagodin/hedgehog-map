@@ -1,7 +1,7 @@
-import { DataContext } from "../context/dataContext";
+import { useDataContext } from "../context/useDataContext";
 import Spinner from "./Spinner";
 import { Box, MenuItem, Paper, Typography } from "@mui/material";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function HedgeHogList() {
   const {
@@ -11,7 +11,7 @@ export default function HedgeHogList() {
     ids,
     setIds,
     setIsLoading,
-  } = useContext(DataContext);
+  } = useDataContext();
 
   const [spinnerActive, setSpinnerAcive] = useState(false);
 

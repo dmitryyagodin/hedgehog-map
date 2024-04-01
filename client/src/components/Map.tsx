@@ -1,4 +1,4 @@
-import { DataContext } from "../context/dataContext";
+import { DataContext } from "../context/useDataContext";
 import useResetView from "../hooks/useResetView";
 import { useSetCenter } from "../hooks/useSetCenter";
 import { useSetFeatures } from "../hooks/useSetFeatures";

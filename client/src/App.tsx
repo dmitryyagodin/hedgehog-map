@@ -2,12 +2,12 @@ import { HedgehogForm } from "./components/HedgehogForm";
 import { HedgehogInfo } from "./components/HedgehogInfo";
 import HedgeHogList from "./components/HedgehogList";
 import { Map } from "./components/Map";
-import { ContextProvider } from "./context/dataContext";
+import { DataContextProvider } from "./context/useDataContext";
 import { Box, Paper, Typography } from "@mui/material";
 
 export function App() {
   return (
-    <ContextProvider>
+    <DataContextProvider>
       <Box
         sx={{
           display: "flex",
@@ -69,6 +69,6 @@ export function App() {
           </Typography>
         </Box>
       </Box>
-    </ContextProvider>
+    </DataContextProvider>
   );
 }

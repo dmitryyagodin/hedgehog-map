@@ -1,13 +1,12 @@
-import { DataContext } from "@client/context/dataContext";
+import { useDataContext } from "@client/context/useDataContext";
 import { Box, CircularProgress } from "@mui/material";
-import { useContext } from "react";
 
 interface SpinnerProps {
   active?: boolean;
 }
 
 const Spinner = ({ active = true }: SpinnerProps) => {
-  const { isLoading } = useContext(DataContext);
+  const { isLoading } = useDataContext();
 
   return (
     <Box

@@ -1,20 +1,10 @@
 import { IconReset } from "./icons";
-import { Button } from "@mui/material";
-import React from "react";
+import { Box, Button } from "@mui/material";
 
-interface ZoomControlsProps {
-  onZoomIn: () => void;
-  onZoomOut: () => void;
-  onResetView: () => void;
-}
 /* TODO REFACTOR STYLING */
-const ZoomControls: React.FC<ZoomControlsProps> = ({
-  onZoomIn,
-  onZoomOut,
-  onResetView,
-}) => {
+const ZoomControls = ({ ...props }) => {
   return (
-    <div
+    <Box
       className="zoom-controls"
       style={{
         position: "absolute",
@@ -27,7 +17,7 @@ const ZoomControls: React.FC<ZoomControlsProps> = ({
       }}
     >
       <Button
-        onClick={onZoomIn}
+        onClick={props.onZoomIn}
         variant="contained"
         color="primary"
         size="medium"
@@ -35,7 +25,7 @@ const ZoomControls: React.FC<ZoomControlsProps> = ({
         +
       </Button>
       <Button
-        onClick={onResetView}
+        onClick={props.onResetView}
         variant="contained"
         color="primary"
         size="medium"
@@ -43,14 +33,14 @@ const ZoomControls: React.FC<ZoomControlsProps> = ({
         <IconReset fill="#fff" />
       </Button>
       <Button
-        onClick={onZoomOut}
+        onClick={props.onZoomOut}
         variant="contained"
         color="primary"
         size="medium"
       >
         -
       </Button>
-    </div>
+    </Box>
   );
 };
 

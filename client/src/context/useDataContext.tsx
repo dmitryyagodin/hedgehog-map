@@ -1,6 +1,6 @@
 import { Hedgehog } from "@ubigu/shared/src/hedgehog";
 import { Position } from "geojson";
-import React, { ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 type Id = {
   name: string;
@@ -33,14 +33,15 @@ const contextDefaultValues: DataContextType = {
   setCoordinates: () => null,
 };
 
-export const DataContext =
-  React.createContext<DataContextType>(contextDefaultValues);
+export const DataContext = createContext<DataContextType>(contextDefaultValues);
+
+export const useDataContext = () => useContext(DataContext);
 
 type Props = {
   children: ReactNode;
 };
 
-export const ContextProvider = ({ children }: Props) => {
+export const DataContextProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hedgehogs, setHedgehogs] = useState<Hedgehog[] | null>(null);
   const [selectedHedgehog, setSelectedHedgehog] = useState<number | null>(null);

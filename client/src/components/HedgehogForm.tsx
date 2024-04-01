@@ -1,4 +1,4 @@
-import { DataContext } from "../context/dataContext";
+import { useDataContext } from "../context/useDataContext";
 import { transformCoordinates } from "../lib/transformCoordinates";
 import Spinner from "./Spinner";
 import {
@@ -14,11 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import { hedgehogSchema } from "@ubigu/shared/src/hedgehog";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 export function HedgehogForm() {
   const { coordinates, setIds, setIsLoading, ids, setSelectedHedgehog } =
-    useContext(DataContext);
+    useDataContext();
   const [errors, setErrors] = useState<{
     name?: string;
     age?: string;
@@ -136,7 +136,6 @@ export function HedgehogForm() {
               error={!!errors.age}
               helperText={errors.age}
               fullWidth
-              placeholder="1-20"
               onBlur={checkCustomValidity}
             />
             <FormControl variant="outlined" error={!!errors.gender} fullWidth>

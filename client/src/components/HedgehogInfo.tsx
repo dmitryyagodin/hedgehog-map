@@ -1,4 +1,4 @@
-import { DataContext } from "../context/dataContext";
+import { useDataContext } from "../context/useDataContext";
 import { formatDate } from "../lib/formatDate";
 import Spinner from "./Spinner";
 import { DeleteIcon } from "./icons";
@@ -14,7 +14,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function HedgehogInfo() {
   const {
@@ -26,7 +26,7 @@ export function HedgehogInfo() {
     setIds,
     setIsLoading,
     isLoading,
-  } = useContext(DataContext);
+  } = useDataContext();
 
   const [openModal, setOpenModal] = useState(false);
   const [spinnerActive, setSpinnerActive] = useState(false);
