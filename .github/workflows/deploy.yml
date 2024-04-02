@@ -1,12 +1,12 @@
-name: Deploy
+name: Deploy to GCP
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,11 +18,17 @@ jobs:
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
           project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
 
-      - name: Authenticate Docker with Google Container Registry
+      - name: Authenticate Docker with GCR
         run: |
-          gcloud auth configure-docker europe-north1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT_ID }} --quiet
+          gcloud auth configure-docker gcr.io --quiet
 
-      - name: Build and push Docker image
+      - name: Build and tag Docker image
         run: |
-          docker build -t europe-north1-docker.pkg.dev/dy-demo-projects/hedgehog-map-image .
-          docker push europe-north1-docker.pkg.dev/dy-demo-projects/hedgehog-map-image
+          docker build -t gcr.io/${{ secrets.GOOGLE_PROJECT_ID }}/my-app:${{ github.sha }} .
+          docker push gcr.io/${{ secrets.GOOGLE_PROJECT_ID }}/my-app:${{ github.sha }}
+
+      - name: Deploy to GCE
+        run: |
+          gcloud compute instances update-container my-instance \
+            --container-image gcr.io/${{ secrets.GOOGLE_PROJECT_ID }}/my-app:${{ github.sha }} \
+            --zone us-central1-a
