@@ -32,16 +32,3 @@ jobs:
         run: |
           docker build -t europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME/app:latest .
           docker push europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME/app:latest
-
-      # SSH into your GCE instance and pull the latest Docker image
-      - name: Deploy to GCE
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.GCE_INSTANCE_IP }}
-          username: ${{ secrets.GCE_USERNAME }}
-          key: ${{ secrets.GCE_SSH_KEY }}
-          port: 22
-          script: |
-            docker login -u _json_key -p "$(gcloud auth print-access-token)" https://gcr.io
-            docker pull europe-north1-docker.pkg.dev/$PROJECT_ID/$IMAGE_NAME/app:latest
-            docker run -d --name hedgehog_map_app -p 80:80 gcr.io/$PROJECT_ID/app:latest
