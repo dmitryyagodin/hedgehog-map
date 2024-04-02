@@ -24,24 +24,21 @@ jobs:
       - name: Authenticate Docker with Google Container Registry
         run: gcloud auth configure-docker
 
-      # Build and push Docker images to GCP Container Registry
-      - name: Build and push Docker images
+      # Build and push Docker image to GCP Container Registry
+      - name: Build and push Docker image
         run: |
-          docker build -t gcr.io/your-project-id/client:latest -f client/Dockerfile .
-          docker build -t gcr.io/your-project-id/server:latest -f server/Dockerfile .
-          docker push gcr.io/your-project-id/client:latest
-          docker push gcr.io/your-project-id/server:latest
+          docker build -t gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest .
+          docker push gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest
 
-      # SSH into your GCE instance and pull the latest Docker images
+      # SSH into your GCE instance and pull the latest Docker image
       - name: Deploy to GCE
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.GCE_INSTANCE_IP}}
+          host: ${{ secrets.GCE_INSTANCE_IP }}
           username: ${{ secrets.GCE_USERNAME }}
           key: ${{ secrets.GCE_SSH_KEY }}
           port: 22
           script: |
             docker login -u _json_key -p "$(gcloud auth print-access-token)" https://gcr.io
-            docker pull gcr.io/your-project-id/client:latest
-            docker pull gcr.io/your-project-id/server:latest
-            docker-compose -f docker-compose.prod.yml up -d
+            docker pull gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest
+            docker run -d --name hedgehog_map_app -p 80:80 gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest
