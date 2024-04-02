@@ -70,7 +70,7 @@ export function HedgehogForm() {
           const data = await res.json();
           const id = {
             id: data.id,
-            name: data.name,
+            name: name,
           };
 
           setIds([...(ids || []), id]);
@@ -91,7 +91,8 @@ export function HedgehogForm() {
     const inputValue = event.target.value;
 
     const validation = hedgehogSchema.safeParse({
-      [target]: inputValue,
+      [target]:
+        event.target.type === "number" ? Number(inputValue) : inputValue,
     });
 
     if ("error" in validation) {
