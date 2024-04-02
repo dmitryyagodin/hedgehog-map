@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.3.0
+        with:
+          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          project_id: ${{ secrets.GOOGLE_PROJECT }}
+
+      # Authenticate Docker with Google Container Registry
+      - name: Authenticate Docker with Google Container Registry
+        run: gcloud auth configure-docker
+
+      # Build and push Docker images to GCP Container Registry
+      - name: Build and push Docker images
+        run: |
+          docker build -t gcr.io/your-project-id/client:latest -f client/Dockerfile .
+          docker build -t gcr.io/your-project-id/server:latest -f server/Dockerfile .
+          docker push gcr.io/your-project-id/client:latest
+          docker push gcr.io/your-project-id/server:latest
+
+      # SSH into your GCE instance and pull the latest Docker images
+      - name: Deploy to GCE
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.GCE_INSTANCE_IP}}
+          username: ${{ secrets.GCE_USERNAME }}
+          key: ${{ secrets.GCE_SSH_KEY }}
+          port: 22
+          script: |
+            docker login -u _json_key -p "$(gcloud auth print-access-token)" https://gcr.io
+            docker pull gcr.io/your-project-id/client:latest
+            docker pull gcr.io/your-project-id/server:latest
+            docker-compose -f docker-compose.prod.yml up -d
