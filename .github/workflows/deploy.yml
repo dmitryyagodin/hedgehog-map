@@ -27,8 +27,8 @@ jobs:
       # Build and push Docker image to GCP Container Registry
       - name: Build and push Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest .
-          docker push gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest
+          docker build -t europe-north1-docker.pkg.dev/divine-apogee-419021/hedgehog-map/app:latest .
+          docker push europe-north1-docker.pkg.dev/divine-apogee-419021/hedgehog-map/app:latest
 
       # SSH into your GCE instance and pull the latest Docker image
       - name: Deploy to GCE
@@ -40,5 +40,5 @@ jobs:
           port: 22
           script: |
             docker login -u _json_key -p "$(gcloud auth print-access-token)" https://gcr.io
-            docker pull gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest
-            docker run -d --name hedgehog_map_app -p 80:80 gcr.io/${{ secrets.GOOGLE_PROJECT }}/hedgehog_map_image:latest
+            docker pull europe-north1-docker.pkg.dev/divine-apogee-419021/hedgehog-map/app:latest
+            docker run -d --name hedgehog_map_app -p 80:80 gcr.io/${{ secrets.GOOGLE_PROJECT }}/app:latest
