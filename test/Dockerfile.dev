@@ -1,0 +1,13 @@
+##
+# E2E testing Dockerfile
+##
+
+FROM cypress/base:18.15.0
+
+WORKDIR /e2e
+
+COPY ./test /e2e
+
+RUN npm ci
+
+ENTRYPOINT [ "npx", "cypress", "run" ]

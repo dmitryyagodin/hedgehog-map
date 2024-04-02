@@ -1,94 +1,74 @@
-import { HedgehogForm } from "./HedgehogForm";
-import { HedgehogInfo } from "./HedgehogInfo";
-import HedgeHogList from "./HedgehogList";
-import { Map } from "./Map";
+import { HedgehogForm } from "./components/HedgehogForm";
+import { HedgehogInfo } from "./components/HedgehogInfo";
+import HedgeHogList from "./components/HedgehogList";
+import { Map } from "./components/Map";
+import { DataContextProvider } from "./context/useDataContext";
 import { Box, Paper, Typography } from "@mui/material";
-import { useState } from "react";
 
 export function App() {
-  // Latest coordinates from the Map click event
-  const [coordinates, setCoordinates] = useState<number[]>();
-  // ID of the currently selected hedgehog
-  const [selectedHedgehogId, setSelectedHedgehogId] = useState<number | null>(
-    null
-  );
-
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        justifyContent: "space-between",
-      }}
-    >
+    <DataContextProvider>
       <Box
         sx={{
-          backgroundColor: "#00B2A0",
-          height: "40px",
-          width: "100%",
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
+          flexDirection: "column",
+          height: { md: "100vh" },
+          justifyContent: "space-between",
         }}
       >
-        <Typography sx={{ color: "white" }} variant="overline">
-          Siilit kartalla
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          display: "grid",
-          gridAutoColumns: "1fr 1.5fr 2fr",
-          gridAutoFlow: "column",
-          overflow: "hidden",
-        }}
-      >
-        <HedgeHogList />
-        <Box>
-          <HedgehogInfo hedgehogId={selectedHedgehogId} />
-          <HedgehogForm coordinates={coordinates || []} />
+        <Box
+          sx={{
+            backgroundColor: "#00B2A0",
+            height: "40px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography sx={{ color: "white" }} variant="overline">
+            Siilit kartalla
+          </Typography>
         </Box>
-        <Paper elevation={3} sx={{ margin: "1em" }}>
-          <Map
-            onMapClick={(coordinates) => setCoordinates(coordinates)}
-            // Esimerkki siitä, miten kartalle voidaan välittää siilien koordinaatteja GeoJSON -arrayssä
-            features={[
-              {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [2859167.020281517, 9632038.56757201],
-                },
-                properties: {
-                  name: "Siili Silvennoinen",
-                  age: 50,
-                  gender: "male",
-                },
-              },
-            ]}
-          />
-        </Paper>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "grid",
+            gridAutoColumns: { xs: "1fr", md: "1fr 1.5fr 2fr" },
+            gridAutoFlow: { xs: "row", md: "column" },
+            overflow: { md: "hidden" },
+          }}
+        >
+          <HedgeHogList />
+          <Box>
+            <HedgehogInfo />
+            <HedgehogForm />
+          </Box>
+          <Paper
+            elevation={3}
+            sx={{ margin: "1em", minHeight: { xs: "50vh", md: "initial" } }}
+          >
+            <Map />
+          </Paper>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: "#00B2A0",
+            height: "40px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography sx={{ color: "white" }} variant="overline">
+            Powered by Ubigu Oy
+          </Typography>
+        </Box>
       </Box>
-      <Box
-        sx={{
-          backgroundColor: "#00B2A0",
-          height: "40px",
-          width: "100%",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {" "}
-        <Typography sx={{ color: "white" }} variant="overline">
-          Powered by Ubigu Oy
-        </Typography>
-      </Box>
-    </Box>
+    </DataContextProvider>
   );
 }

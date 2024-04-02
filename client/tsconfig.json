@@ -2,6 +2,7 @@
   "compilerOptions": {
     "lib": ["DOM", "ES2019"],
     "target": "ES2020",
+    "skipLibCheck": true,
     "strict": true,
     "allowJs": false,
     "jsx": "react-jsx",
@@ -16,5 +17,6 @@
       "@shared/*": ["node_modules/@ubigu/shared/src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
