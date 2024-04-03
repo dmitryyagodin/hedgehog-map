@@ -1,8 +1,32 @@
 # Ubigu koodiharjoitustyö
 
+## Deploy
+ Katso julkastu versio: [Hedgehog-map](https://hedgehog-map-yl2byxgvfq-lz.a.run.app/)
+- tietokanta (GCP Compute Engine)
+- sovellus (GCP Cloud Run)
+	- GitHub Apps
+	- GCP Cloud Build
+	- GCP Artifact Registry (Docker registry)
+
+Alkuperäisten vaatimusten lisäksi sovelluksessa toteutettu myös:
+- mahdollisuus poistaa siili
+- sovelluksen responsiivisuus (mobiili versio)
+- koordinaattien muuntaminen ihmisen luettavaan muotoon 
+
+## Testaus
+ - Cypress e2e
+	- API testit
+	- alustavasti UI testit
+
+Testit integroitu aluperäiseen `docker compose` toiminnallisuuteen. Sen kautta testaus on myös kytketty GitHub Actions ominaisuuteen `e2e-testing.yml` ja testien onnistuminen edellyttää `merge` dev haarasta masteriin. Onnistunut merge masteriin automaatisesti trigeroi uusi version bildausta GCP pilvissä.
+
+Samalla testaaminen onnistuu devaamisen aikana lokaalisti `docker compose up` tilassa **test**  kansiossa olevalla `npm run test` skriptilla.
+
 ## Sovelluksen osat
 
 Sovellus koostuu kolmesta komponentista: serveri/api-rajapinta (Node.js / Fastify), tietokanta (PostgreSQL / PostGIS) sekä käyttöliittymä (React, MUI, OpenLayers).
+
+
 
 ## Sovelluksen käynnistäminen
 
