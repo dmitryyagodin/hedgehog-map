@@ -101,7 +101,7 @@ export function Map({ children }: Props) {
   }, [olMap]);
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div className="cy-map" style={{ width: "100%", height: "100%" }}>
       <GlobalStyles styles={{ ".ol-viewport": { cursor: "pointer" } }} />
       <div
         style={{ width: "100%", height: "100%", position: "relative" }}

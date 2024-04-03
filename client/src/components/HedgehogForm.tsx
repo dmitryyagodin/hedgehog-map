@@ -118,7 +118,7 @@ export function HedgehogForm() {
         }}
       >
         <Spinner active={spinnerActive} />
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="cy-form">
           <Box display="flex" flexDirection="column" rowGap={2}>
             <TextField
               label="Nimi"
