@@ -9,8 +9,6 @@ FROM node:18.10-alpine AS base
 
 ENV APPDIR /app
 
-ENV NODE_ENV production
-
 ARG PG_HOST
 ENV PG_HOST ${PG_HOST}
 
@@ -72,5 +70,6 @@ COPY --from=client-build ${APPDIR}/client/dist ./static
 EXPOSE 8080
 
 ENV TZ=Europe/Helsinki
+ENV NODE_ENV production
 
 CMD npm run db-migrate:prod && npm start
