@@ -2,12 +2,12 @@
 import { apiUrl } from './urls'
 
 describe('API tests', () => {
-  it('GET all request should have response status 200', () => {
+  it('GET all API request should have response status 200', () => {
     cy.request(apiUrl).as('Get')
     cy.get('@Get').its('status').should('equal', 200)
   })
 
-  it('response should be json', () => {
+  it('GET all response should be json', () => {
     cy.request(apiUrl).as('Get')
     cy.get('@Get')
       .its('headers')
