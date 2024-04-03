@@ -51,12 +51,26 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  db-migrate:
+    build:
+      context: .
+      dockerfile: server/Dockerfile.dev
+    volumes:
+      - ./server:/app/server:delegated
+      - ./shared:/app/shared:delegated
+      - /app/server/node_modules
+      - /app/shared/node_modules
+    command: npm run db-migrate
+    depends_on:
+      db:
+        condition: service_healthy
   e2e:
     build:
       context: .
       dockerfile: test/Dockerfile.dev
     depends_on:
       - client
+      - db-migrate 
     environment:
       - CYPRESS_baseUrl=http://client:8080
 volumes:
