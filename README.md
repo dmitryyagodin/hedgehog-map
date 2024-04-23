@@ -1,7 +1,7 @@
 # Ubigu koodiharjoitustyö
 
 ## Deploy
- Katso julkastu versio: [Hedgehog-map](https://hedgehog-map-yl2byxgvfq-lz.a.run.app/)
+ ~~Katso julkastu versio: [Hedgehog-map](https://hedgehog-map-yl2byxgvfq-lz.a.run.app/)~~
 - tietokanta (GCP Compute Engine)
 - sovellus (GCP Cloud Run)
 	- GitHub Apps
